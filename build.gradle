@@ -1,56 +1,84 @@
 buildscript {
-	ext {
-		springBootVersion = '1.3.3.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
-	}
+    ext {
+        springBootVersion = '1.3.3.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
-apply plugin: 'spring-boot' 
+apply plugin: 'spring-boot'
 
 jar {
-	baseName = 'spring-boot-quartz-mongodb'
-	version = '0.0.1-SNAPSHOT'
+    baseName = 'spring-boot-quartz-mongodb'
+    version = '0.0.1-SNAPSHOT'
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-	mavenCentral()
+    mavenCentral()
+    maven {
+        url "http://clojars.org/repo"
+    }
 }
 
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-actuator')
-	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
-	compile('org.springframework.boot:spring-boot-devtools')
-	compile('org.projectlombok:lombok:1.16.6')
-	testCompile('org.springframework.boot:spring-boot-starter-test') 
+    // "Put an End to Java Ceremony"
+    compile('org.projectlombok:lombok:1.16.8')
+
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework:spring-context-support')  // setup quartz beans
+    compile('org.springframework:spring-tx') // transaction support required by quartz
+    //compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-devtools')
+
+    compile('org.quartz-scheduler:quartz:2.2.1')
+    compile('com.novemberain:quartz-mongodb:2.0.0-rc1')
+    compile('org.mongodb:mongo-java-driver:3.2.2')
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('com.github.fakemongo:fongo:2.0.6')  // in-memory MongoDB for unit testing
+    testCompile('org.hamcrest:hamcrest-library:1.3')
+}
+
+configurations.all {
+    // we exclude Tomcat, because embedded Jetty is used as servlet container
+    exclude module: 'spring-boot-starter-tomcat'
+}
+
+springBoot {
+    mainClass = 'de.nava.demo.Application'
+    excludeDevtools = true
+}
+
+bootRun {
+    systemProperties System.properties
 }
 
 // ~~ set reasonable defaults for IDEs
 
 idea {
-	module {
-		inheritOutputDirs = false
-		outputDir = file("$buildDir/classes/main/")
-	}
+    module {
+        inheritOutputDirs = false
+        outputDir = file("$buildDir/classes/main/")
+    }
 }
 
 eclipse {
-	classpath {
-		 containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-		 containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
-	}
+    classpath {
+        containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+        containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+    }
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '2.12'
+    gradleVersion = '2.12'
 }

@@ -40,7 +40,7 @@ dependencies {
     //compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-devtools')
 
-    compile('org.quartz-scheduler:quartz:2.2.1')
+    compile('org.quartz-scheduler:quartz:2.2.2')
     compile('com.novemberain:quartz-mongodb:2.0.0-rc1')
     compile('org.mongodb:mongo-java-driver:3.2.2')
 

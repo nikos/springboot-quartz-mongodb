@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/nikos/spring-boot-quartz-mongodb.svg?branch=master)](https://travis-ci.org/nikos/spring-boot-quartz-mongodb)
+
 # spring-boot-quartz-mongodb
 
 Sample Spring Boot application using Quartz scheduler with MongoDB for persisting job state.

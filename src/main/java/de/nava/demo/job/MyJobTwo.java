@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Slf4j
 @PersistJobDataAfterExecution
 @DisallowConcurrentExecution
@@ -20,6 +23,7 @@ public class MyJobTwo extends QuartzJobBean {
         log.info("{}: {}: {}", jobKey, name, cnt);
         cnt++;
         dataMap.put(COUNT, cnt);
+        dataMap.put("LAST_EXECUTION", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
     }
 
     public void setName(String name) {

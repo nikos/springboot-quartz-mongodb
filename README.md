@@ -27,3 +27,4 @@ Per default JDWP is listening on port 5005 per dt_socket transport.
 ### TODO
 
 * Allow integration testing by making use of [Fongo](https://github.com/fakemongo/fongo), see [Issue 77](https://github.com/michaelklishin/quartz-mongodb/issues/77) for inspiration
+* Migration in case job or trigger configuration has changed, see [mongeez](https://github.com/mongeez/mongeez)

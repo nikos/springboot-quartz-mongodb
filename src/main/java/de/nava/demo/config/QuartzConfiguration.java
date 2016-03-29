@@ -1,15 +1,14 @@
 package de.nava.demo.config;
 
-import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-
-import java.io.IOException;
 
 @Configuration
 public class QuartzConfiguration {
@@ -20,16 +19,22 @@ public class QuartzConfiguration {
     private ApplicationContext applicationContext;
 
     @Autowired
-    private CronTriggerFactoryBean cronTriggerMyJobTwo;
+    @Qualifier("trigger1")
+    private FactoryBean<? extends Trigger> cronTriggerMyJobTwo;
+
+    @Autowired
+    @Qualifier("trigger2")
+    private FactoryBean<? extends Trigger> simpleTriggerMyJobOne;
 
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean() throws IOException, SchedulerException {
+    public SchedulerFactoryBean schedulerFactoryBean() throws Exception {
         SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
         scheduler.setApplicationContextSchedulerContextKey(CONTEXT_KEY);
         scheduler.setApplicationContext(applicationContext);
         scheduler.setConfigLocation(new ClassPathResource("quartz.properties"));
+        // TODO: how to set triggers to a later point in time?
         scheduler.setTriggers(
-                // simpleTriggerMyJobOne,
+                simpleTriggerMyJobOne.getObject(),
                 cronTriggerMyJobTwo.getObject()
         );
         return scheduler;

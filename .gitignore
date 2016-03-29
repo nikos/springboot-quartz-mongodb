@@ -1,13 +1,16 @@
 *.class
+build/
 .gradle
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
 
 # Package Files
 *.jar
 *.war
 *.ear
+
+# Eclipse project files
+.project
+.classpath
+.settings
 
 # IntelliJ IDEA project files
 *.ipr

@@ -1,32 +1,16 @@
 package de.nava.demo.config;
 
 import de.nava.demo.job.MyJobTwo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
-import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
-import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
 public class JobConfiguration {
-
-    @Autowired
-    private SchedulerFactoryBean scheduler;
-
-    @PostConstruct
-    private void setUp() {
-        // TODO: set triggers dynamically
-        scheduler.setTriggers(
-                // simpleTriggerMyJobOne,
-                cronTriggerMyJobTwo().getObject()
-        );
-    }
-
 
     /* @Bean
     public MethodInvokingJobDetailFactoryBean methodInvokingJobDetailFactoryBean() {

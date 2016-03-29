@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import java.io.IOException;
@@ -18,12 +19,19 @@ public class QuartzConfiguration {
     @Autowired
     private ApplicationContext applicationContext;
 
+    @Autowired
+    private CronTriggerFactoryBean cronTriggerMyJobTwo;
+
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean() throws IOException, SchedulerException {
         SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
         scheduler.setApplicationContextSchedulerContextKey(CONTEXT_KEY);
         scheduler.setApplicationContext(applicationContext);
         scheduler.setConfigLocation(new ClassPathResource("quartz.properties"));
+        scheduler.setTriggers(
+                // simpleTriggerMyJobOne,
+                cronTriggerMyJobTwo.getObject()
+        );
         return scheduler;
     }
 

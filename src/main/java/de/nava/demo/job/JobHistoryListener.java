@@ -8,6 +8,7 @@ import org.quartz.impl.matchers.EverythingMatcher;
 import org.quartz.spi.ClassLoadHelper;
 import org.quartz.spi.SchedulerPlugin;
 import org.springframework.context.ApplicationContext;
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -67,7 +68,7 @@ public class JobHistoryListener implements SchedulerPlugin, JobListener {
     public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
         log.info("jobWasExecuted :: {}", context);
         Trigger trigger = context.getTrigger();
-        if (jobException == null) {
+        if (StringUtils.isEmpty(jobException)) {
             writeDoc(new HashMap<String, Object>() {{
                 put("ts", new Date());
                 put("name", context.getJobDetail().getKey().getName());

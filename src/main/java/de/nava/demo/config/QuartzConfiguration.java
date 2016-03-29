@@ -23,7 +23,7 @@ public class QuartzConfiguration {
         SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
         scheduler.setApplicationContextSchedulerContextKey(CONTEXT_KEY);
         scheduler.setApplicationContext(applicationContext);
-        scheduler.setConfigLocation(new ClassPathResource("/quartz.properties"));
+        scheduler.setConfigLocation(new ClassPathResource("quartz.properties"));
         return scheduler;
     }
 

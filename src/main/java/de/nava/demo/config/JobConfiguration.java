@@ -40,7 +40,6 @@ public class JobConfiguration {
         return triggerFactory;
     }
 
-
     @Bean
     public JobDetailFactoryBean jobDetailMyJobTwo() {
         JobDetailFactoryBean jobDetailFactory = new JobDetailFactoryBean();

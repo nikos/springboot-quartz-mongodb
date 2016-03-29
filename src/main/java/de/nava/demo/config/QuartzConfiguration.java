@@ -1,5 +1,6 @@
 package de.nava.demo.config;
 
+import de.nava.demo.job.AutoWiringSpringBeanJobFactory;
 import org.quartz.Trigger;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,17 @@ public class QuartzConfiguration {
     private FactoryBean<? extends Trigger> simpleTriggerMyJobOne;
 
     @Bean
+    public AutoWiringSpringBeanJobFactory autoWiringSpringBeanJobFactory(){
+        return new AutoWiringSpringBeanJobFactory();
+    }
+
+    @Bean
     public SchedulerFactoryBean schedulerFactoryBean() throws Exception {
         SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
         scheduler.setApplicationContextSchedulerContextKey(CONTEXT_KEY);
         scheduler.setApplicationContext(applicationContext);
         scheduler.setConfigLocation(new ClassPathResource("quartz.properties"));
+        scheduler.setJobFactory(autoWiringSpringBeanJobFactory());
         // TODO: how to set triggers to a later point in time?
         scheduler.setTriggers(
                 simpleTriggerMyJobOne.getObject(),

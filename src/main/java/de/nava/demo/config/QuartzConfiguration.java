@@ -13,12 +13,15 @@ import java.io.IOException;
 @Configuration
 public class QuartzConfiguration {
 
+    public static final String CONTEXT_KEY = "applicationContext";
+
     @Autowired
     private ApplicationContext applicationContext;
 
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean() throws IOException, SchedulerException {
         SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
+        scheduler.setApplicationContextSchedulerContextKey(CONTEXT_KEY);
         scheduler.setApplicationContext(applicationContext);
         scheduler.setConfigLocation(new ClassPathResource("/quartz.properties"));
         return scheduler;

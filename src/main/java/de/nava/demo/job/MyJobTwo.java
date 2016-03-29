@@ -24,6 +24,7 @@ public class MyJobTwo extends QuartzJobBean {
         cnt++;
         dataMap.put(COUNT, cnt);
         dataMap.put("LAST_EXECUTION", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+        ctx.setResult("ok");
     }
 
     public void setName(String name) {

@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/nikos/spring-boot-quartz-mongodb.svg?branch=master)](https://travis-ci.org/nikos/spring-boot-quartz-mongodb)
+[![Build Status](https://travis-ci.org/nikos/springboot-quartz-mongodb.svg?branch=master)](https://travis-ci.org/nikos/springboot-quartz-mongodb)
 
 # spring-boot-quartz-mongodb
 

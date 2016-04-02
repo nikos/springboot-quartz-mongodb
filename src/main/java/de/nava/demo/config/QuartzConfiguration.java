@@ -21,11 +21,11 @@ public class QuartzConfiguration {
 
     @Autowired
     @Qualifier("trigger1")
-    private FactoryBean<? extends Trigger> cronTriggerMyJobTwo;
+    private FactoryBean<? extends Trigger> simpleTriggerMyJobOne;
 
     @Autowired
     @Qualifier("trigger2")
-    private FactoryBean<? extends Trigger> simpleTriggerMyJobOne;
+    private FactoryBean<? extends Trigger> cronTriggerMyJobTwo;
 
     @Bean
     public AutoWiringSpringBeanJobFactory autoWiringSpringBeanJobFactory(){

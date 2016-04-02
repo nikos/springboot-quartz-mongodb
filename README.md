@@ -24,7 +24,15 @@ To start the application (with embedded Jetty) in debug mode, just call:
 Per default JDWP is listening on port 5005 per dt_socket transport.
 
 
+### MongoDB maintenance
+
+For cleaning up job and trigger definition, execute:
+
+    mongo jobs-demo < cleanup-jobs.js
+
+
 ### TODO
 
 * Allow integration testing by making use of [Fongo](https://github.com/fakemongo/fongo), see [Issue 77](https://github.com/michaelklishin/quartz-mongodb/issues/77) for inspiration
 * Migration in case job or trigger configuration has changed, see [mongeez](https://github.com/mongeez/mongeez)
+* Discuss alternative approach to auto-wiring, but using job data map to transport payload

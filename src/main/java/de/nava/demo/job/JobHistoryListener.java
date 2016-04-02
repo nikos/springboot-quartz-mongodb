@@ -73,8 +73,8 @@ public class JobHistoryListener implements SchedulerPlugin, JobListener {
                 put("ts", new Date());
                 put("name", context.getJobDetail().getKey().getName());
                 put("group", context.getJobDetail().getKey().getGroup());
-                put("previousFireTime", trigger.getPreviousFireTime());
-                put("nextFireTime", trigger.getNextFireTime());
+                put("started", context.getFireTime());
+                put("runtime", context.getJobRunTime());
                 put("refireCount", context.getRefireCount());
                 put("result", String.valueOf(context.getResult()));
             }});
@@ -84,8 +84,8 @@ public class JobHistoryListener implements SchedulerPlugin, JobListener {
                 put("ts", new Date());
                 put("name", context.getJobDetail().getKey().getName());
                 put("group", context.getJobDetail().getKey().getGroup());
-                put("previousFireTime", trigger.getPreviousFireTime());
-                put("nextFireTime", trigger.getNextFireTime());
+                put("started", context.getFireTime());
+                put("runtime", context.getJobRunTime());
                 put("refireCount", context.getRefireCount());
                 put("errMsg", jobException.getMessage());
                 put("jobException", jobException.getMessage());
@@ -100,8 +100,8 @@ public class JobHistoryListener implements SchedulerPlugin, JobListener {
             put("ts", new Date());
             put("name", context.getJobDetail().getKey().getName());
             put("group", context.getJobDetail().getKey().getGroup());
-            put("previousFireTime", trigger.getPreviousFireTime());
-            put("nextFireTime", trigger.getNextFireTime());
+            put("started", context.getFireTime());
+            put("runtime", context.getJobRunTime());
             put("refireCount", context.getRefireCount());
             put("veto", true);
         }});

@@ -1,15 +1,13 @@
 package de.nava.demo.config;
 
 import de.nava.demo.job.AutoWiringSpringBeanJobFactory;
-import org.quartz.Trigger;
-import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
 @Configuration
 public class QuartzConfiguration {
@@ -19,31 +17,18 @@ public class QuartzConfiguration {
     @Autowired
     private ApplicationContext applicationContext;
 
-    @Autowired
-    @Qualifier("trigger1")
-    private FactoryBean<? extends Trigger> simpleTriggerMyJobOne;
-
-    @Autowired
-    @Qualifier("trigger2")
-    private FactoryBean<? extends Trigger> cronTriggerMyJobTwo;
-
     @Bean
-    public AutoWiringSpringBeanJobFactory autoWiringSpringBeanJobFactory(){
+    public SpringBeanJobFactory springBeanJobFactory() {
         return new AutoWiringSpringBeanJobFactory();
     }
 
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean() throws Exception {
+    public SchedulerFactoryBean schedulerFactoryBean() {
         SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
         scheduler.setApplicationContextSchedulerContextKey(CONTEXT_KEY);
         scheduler.setApplicationContext(applicationContext);
         scheduler.setConfigLocation(new ClassPathResource("quartz.properties"));
-        scheduler.setJobFactory(autoWiringSpringBeanJobFactory());
-        // TODO: how to set triggers to a later point in time?
-        scheduler.setTriggers(
-                simpleTriggerMyJobOne.getObject(),
-                cronTriggerMyJobTwo.getObject()
-        );
+        scheduler.setJobFactory(springBeanJobFactory());
         return scheduler;
     }
 

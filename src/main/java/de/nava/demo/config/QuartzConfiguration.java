@@ -29,6 +29,7 @@ public class QuartzConfiguration {
         scheduler.setApplicationContext(applicationContext);
         scheduler.setConfigLocation(new ClassPathResource("quartz.properties"));
         scheduler.setJobFactory(springBeanJobFactory());
+        // scheduler.setAutoStartup(false);  // to not automatically start after startup
         return scheduler;
     }
 

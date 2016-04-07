@@ -13,21 +13,17 @@ import java.time.format.DateTimeFormatter;
 public class MyJobTwo extends QuartzJobBean {
 
     public static final String COUNT = "count";
-
-    private String name;
+    public static final String LAST_EXECUTION = "LAST_EXECUTION";
 
     protected void executeInternal(JobExecutionContext ctx) throws JobExecutionException {
         JobDataMap dataMap = ctx.getJobDetail().getJobDataMap();
         int cnt = dataMap.getInt(COUNT);
         JobKey jobKey = ctx.getJobDetail().getKey();
-        log.info("{}: {}: {}", jobKey, name, cnt);
+        log.info("{}: times executed {}", jobKey, cnt);
         cnt++;
         dataMap.put(COUNT, cnt);
-        dataMap.put("LAST_EXECUTION", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+        dataMap.put(LAST_EXECUTION, LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
         ctx.setResult("ok");
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-} 
+}

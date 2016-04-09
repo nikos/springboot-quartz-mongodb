@@ -1,8 +1,7 @@
 package de.nava.demo.job;
 
-import com.mongodb.MongoClient;
+import de.nava.demo.repository.JobHistoryRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.Document;
 import org.quartz.*;
 import org.quartz.impl.matchers.EverythingMatcher;
 import org.quartz.spi.ClassLoadHelper;
@@ -13,7 +12,6 @@ import org.springframework.util.StringUtils;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 import static de.nava.demo.config.QuartzConfiguration.CONTEXT_KEY;
 
@@ -29,7 +27,7 @@ public class JobHistoryListener implements SchedulerPlugin, JobListener {
 
     private String name;
     private Scheduler scheduler;
-    private MongoClient mongo;
+    private JobHistoryRepository repository;
 
     public void initialize(String pname, Scheduler scheduler, ClassLoadHelper classLoadHelper) throws SchedulerException {
         this.name = pname;
@@ -45,13 +43,9 @@ public class JobHistoryListener implements SchedulerPlugin, JobListener {
         // retrieve Spring application context to setup
         try {
             log.debug("Available context keys: {}", Arrays.asList(scheduler.getContext().getKeys()));
-            if (scheduler.getContext().containsKey(CONTEXT_KEY)) {
-                ApplicationContext ctx = (ApplicationContext) scheduler.getContext().get(CONTEXT_KEY);
-                log.info("Retrieving mongo client from context: {}", Arrays.asList(scheduler.getContext().getKeys()));
-                mongo = ctx.getBean(MongoClient.class);
-            } else {
-                log.warn("No Spring context in scheduler, expected key: {}", CONTEXT_KEY);
-            }
+            ApplicationContext ctx = (ApplicationContext) scheduler.getContext().get(CONTEXT_KEY);
+            log.info("Retrieving mongo client from context: {}", Arrays.asList(scheduler.getContext().getKeys()));
+            repository = ctx.getBean(JobHistoryRepository.class);
         } catch (SchedulerException e) {
             log.error("Unable to retrieve application context from quartz scheduler", e);
         }
@@ -67,9 +61,8 @@ public class JobHistoryListener implements SchedulerPlugin, JobListener {
 
     public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
         log.info("jobWasExecuted :: {}", context);
-        Trigger trigger = context.getTrigger();
         if (StringUtils.isEmpty(jobException)) {
-            writeDoc(new HashMap<String, Object>() {{
+            repository.add(new HashMap<String, Object>() {{
                 put("ts", new Date());
                 put("name", context.getJobDetail().getKey().getName());
                 put("group", context.getJobDetail().getKey().getGroup());
@@ -78,9 +71,9 @@ public class JobHistoryListener implements SchedulerPlugin, JobListener {
                 put("refireCount", context.getRefireCount());
                 put("result", String.valueOf(context.getResult()));
             }});
-            // TODO: have explict field stating hasException: true / false ?
+            // TODO: have explict field: hasException: true / false ?
         } else {
-            writeDoc(new HashMap<String, Object>() {{
+            repository.add(new HashMap<String, Object>() {{
                 put("ts", new Date());
                 put("name", context.getJobDetail().getKey().getName());
                 put("group", context.getJobDetail().getKey().getGroup());
@@ -95,8 +88,7 @@ public class JobHistoryListener implements SchedulerPlugin, JobListener {
 
     public void jobExecutionVetoed(JobExecutionContext context) {
         log.info("jobExecutionVetoed :: {}", context);
-        Trigger trigger = context.getTrigger();
-        writeDoc(new HashMap<String, Object>() {{
+        repository.add(new HashMap<String, Object>() {{
             put("ts", new Date());
             put("name", context.getJobDetail().getKey().getName());
             put("group", context.getJobDetail().getKey().getGroup());
@@ -105,16 +97,6 @@ public class JobHistoryListener implements SchedulerPlugin, JobListener {
             put("refireCount", context.getRefireCount());
             put("veto", true);
         }});
-    }
-
-
-    private void writeDoc(Map<String, Object> keys) {
-        if (mongo != null) {
-            // TODO: make configurable / use repository ?
-            // TODO: set expire TTL based on 'ts' field (ie. 7 days)
-            mongo.getDatabase("jobs-demo").getCollection("job_history")
-                    .insertOne(new Document(keys));
-        }
     }
 
 }

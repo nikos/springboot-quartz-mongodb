@@ -14,9 +14,6 @@ public class QuartzConfiguration {
 
     public static final String CONTEXT_KEY = "applicationContext";
 
-    @Autowired
-    private ApplicationContext applicationContext;
-
     @Bean
     public SpringBeanJobFactory springBeanJobFactory() {
         return new AutoWiringSpringBeanJobFactory();
@@ -25,11 +22,11 @@ public class QuartzConfiguration {
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean() {
         SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
-        scheduler.setApplicationContextSchedulerContextKey(CONTEXT_KEY);
-        scheduler.setApplicationContext(applicationContext);
+        scheduler.setApplicationContextSchedulerContextKey("applicationContext");
         scheduler.setConfigLocation(new ClassPathResource("quartz.properties"));
         scheduler.setJobFactory(springBeanJobFactory());
         // scheduler.setAutoStartup(false);  // to not automatically start after startup
+        scheduler.setWaitForJobsToCompleteOnShutdown(true);
         return scheduler;
     }
 

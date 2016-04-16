@@ -5,22 +5,23 @@ import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.PersistJobDataAfterExecution;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.quartz.QuartzJobBean;
-import org.springframework.stereotype.Component;
 
 @Slf4j
 @PersistJobDataAfterExecution
 @DisallowConcurrentExecution
-@Component
 public class MyJobOne extends QuartzJobBean {
 
-    @Autowired
-    private Environment env;
+    private ApplicationContext applicationContext;
+
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        log.info("This is Job 1, executed by {}", env);
+        log.info("This is Job 1, executed by {}", applicationContext.getBean(Environment.class));
     }
 }

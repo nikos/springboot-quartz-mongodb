@@ -1,6 +1,7 @@
 *.class
 build/
 .gradle
+.shelf
 
 # Package Files
 *.jar

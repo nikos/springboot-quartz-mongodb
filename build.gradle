@@ -32,20 +32,20 @@ repositories {
 
 dependencies {
     // "Put an End to Java Ceremony"
-    compile('org.projectlombok:lombok:1.16.8')
+    compile 'org.projectlombok:lombok:1.16.8'
 
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.springframework:spring-context-support')  // setup quartz beans
-    compile('org.springframework:spring-tx') // transaction support required by quartz
-    compile('org.springframework.boot:spring-boot-starter-actuator')
-    compile('org.springframework.boot:spring-boot-devtools')
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework:spring-context-support'  // setup quartz beans
+    compile 'org.springframework:spring-tx' // transaction support required by quartz
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile 'org.springframework.boot:spring-boot-devtools'
 
-    compile('org.quartz-scheduler:quartz:2.2.2')
-    compile('com.novemberain:quartz-mongodb:2.0.0-rc1')
-    compile('org.mongodb:mongo-java-driver:3.2.2')
+    compile 'org.quartz-scheduler:quartz:2.2.2'
+    compile 'com.novemberain:quartz-mongodb:2.0.0-rc1'
+    compile 'org.mongodb:mongo-java-driver:3.2.2'
 
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('com.github.fakemongo:fongo:2.0.6')  // in-memory MongoDB for unit testing
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'com.github.fakemongo:fongo:2.0.6'  // in-memory MongoDB for unit testing
 }
 
 configurations.all {
